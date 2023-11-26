@@ -1,16 +1,12 @@
-// import { spawn } from "child_process";
+const { spawn } = require("child_process");
 
-const longComputation = () => {
-    let sum = 0;
-    for (let i = 0; i < 1e9; i++) {
-      sum += i;
-    };
-    return sum;
-  };
-  
-  process.on('message', (msg) => {
-    const sum = longComputation();
-    // @ts-ignore
-    process.send(sum);
+process.on("message", (npmPackage) => {
+  console.log("NPM package", npmPackage);
+  const npm = spawn("npm", ["i", `${npmPackage}`]);
+
+  npm.stdout.on("data", (data) => {
+    console.log("DATA \n\n", data);
+    //@ts-ignore
+    process.send("test");
   });
-  
+});
