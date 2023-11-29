@@ -15,12 +15,14 @@ export default function handler(
   if (req.method === "POST") {
     const parsedBody = JSON.parse(req.body);
 
-    const runCommand = fork(path.join(process.cwd(), "/pages/commandScript.js"));
+    console.log("CODE BODY \n\n", parsedBody);
 
-    runCommand.send(parsedBody.command);
+    const runCommand = fork(path.join(process.cwd(), "/pages/codeScript.js"));
+
+    runCommand.send(parsedBody.code);
     runCommand.on("message", (data) => {
       if (!data) {
-        console.log("NO data retured");
+        console.log("NO code data retured");
       }
       const rdata = JSON.stringify({ message: data });
       res.json(rdata as any);
